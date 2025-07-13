@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Malla Química Farmacéutico PUC</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 30px;
+      background: #88aaba;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      color: #ffffff;
+      margin-bottom: 40px;
+    }
+
+    .semester {
+      background: #ffffff;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #599aaa;
+    }
+
+    .course {
+      display: inline-block;
+      margin: 6px;
+      padding: 10px 16px;
+      border-radius: 6px;
+      background: #ffffff;
+      color: #000000;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.1s;
+    }
+
+    .course:hover {
+      background: #f0f0f0;
+      transform: scale(1.03);
+    }
+
+    .course.completed {
+      background: #0497b3;
+      color: #000000;
+      border-color: #027e97;
+      text-decoration: line-through;
+    }
+
+    @media (max-width: 600px) {
+      .course {
+        display: block;
+        width: 100%;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Malla Interactiva - Químico Farmacéutico PUC</h1>
+  <div id="malla"></div>
+
+  <script>
+    const cursosPorSemestre = [
+      { nombre: "Primer semestre", cursos: [
+        "Precálculo (MAT1000)", "Física general (FIS1503)", "Biología de la célula (BIO141C)",
+        "Química general (QIM100I)", "Filosofía (FIL2001)", "Taller de iniciación (CLG0901)"
+      ]},
+      { nombre: "Segundo semestre", cursos: [
+        "Cálculo I (MAT1100)", "Química general II (QIM100A)", "Física general II (FIS1504)",
+        "Laboratorio de física general II (FIS154L)", "El mundo de los medicamentos (QIF117)", "AFG"
+      ]},
+      { nombre: "Tercer semestre", cursos: [
+        "Cálculo II (MAT1220)", "Química orgánica I (QIM102A)", "Introducción a las ciencias farmacéuticas (QIF100B)",
+        "Botánica y farmacognosia (QIF115A)", "Laboratorio de química general (QIM101Q)", "AFG"
+      ]},
+      { nombre: "Cuarto semestre", cursos: [
+        "Estadística para química y farmacia (EYP2310)", "Optativo disciplinario", "Química orgánica II (QIM103A)",
+        "Fisiología (BIO135C)", "AFG"
+      ]},
+      { nombre: "Quinto semestre", cursos: [
+        "Química-Física (QIM150A)", "Fisiopatología (MEB203B)", "Bioquímica (QIM117)", "Minor", "AFG"
+      ]},
+      { nombre: "Sexto semestre", cursos: [
+        "Química analítica I (QIM109A)", "Microbiología e inmunología (BIO145C)", "Minor", "Minor", "AFG"
+      ]},
+      { nombre: "Séptimo semestre", cursos: [
+        "Análisis instrumental (QIM111)", "Laboratorio de química orgánica (QIM104A)", "Minor", "Minor", "AFG"
+      ]},
+      { nombre: "Octavo semestre", cursos: [
+        "Fármaco-Química I (QIF101A)", "Farmacocinética y bio-farmacia (QIF104A)", "Farmacología I (QIF150)",
+        "Bioquímica clínica (QIF118)", "Teológico"
+      ]},
+      { nombre: "Noveno semestre", cursos: [
+        "Fármaco-Química II (QIF102A)", "Tecnología farmacéutica I (QIF105A)", "Farmacología II (QIF116)"
+      ]},
+      { nombre: "Décimo semestre", cursos: [
+        "Toxicología (QIF108)", "Tesis de grado (QIF400)"
+      ]},
+      { nombre: "Onceavo semestre", cursos: [
+        "Fármaco-Química III (QIF103A)", "Farmacia clínica y atención farmacéutica (QIF110A)",
+        "Farmacología III (QIF111A)", "Tecnología farmacéutica II (QIF106A)", "Optativo de profundización",
+        "Práctica profesional I (QIF113A)"
+      ]},
+      { nombre: "Doceavo semestre", cursos: [
+        "Salud pública para química y farmacia (MEB231Q)", "Legislación y deontología farmacéutica (QIF107)",
+        "Internado clínico (QIF112A)", "Farmacia privada (QIF109A)", "Optativo de profundización",
+        "Optativo de profundización", "Práctica profesional II (QIF114A)"
+      ]}
+    ];
+
+    function guardarEstado(curso, completado) {
+      localStorage.setItem(curso, completado ? "1" : "0");
+    }
+
+    function cargarEstado(curso) {
+      return localStorage.getItem(curso) === "1";
+    }
+
+    const mallaDiv = document.getElementById("malla");
+
+    cursosPorSemestre.forEach(semestre => {
+      const semestreDiv = document.createElement("div");
+      semestreDiv.className = "semester";
+      semestreDiv.innerHTML = `<h2>${semestre.nombre}</h2>`;
+
+      semestre.cursos.forEach(curso => {
+        const cursoDiv = document.createElement("div");
+        cursoDiv.className = "course";
+        cursoDiv.innerText = curso;
+
+        if (cargarEstado(curso)) {
+          cursoDiv.classList.add("completed");
+        }
+
+        cursoDiv.addEventListener("click", () => {
+          cursoDiv.classList.toggle("completed");
+          guardarEstado(curso, cursoDiv.classList.contains("completed"));
+        });
+
+        semestreDiv.appendChild(cursoDiv);
+      });
+
+      mallaDiv.appendChild(semestreDiv);
+    });
+  </script>
+</body>
+</html>
